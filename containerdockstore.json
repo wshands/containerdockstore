@@ -1,0 +1,13 @@
+{
+   "docker_image": "quay.io/wshands/fastqc",
+
+   "json_file": {
+        "class": "File",
+        "path": "/home/ubuntu/fastqcwork/fastqc/fastqc.json"
+    },
+    
+#    "docker_sock_file": {
+#        "class": "Directory",
+#        "path": "/var/run/docker.sock"
+#    }
+}
