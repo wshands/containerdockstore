@@ -1,0 +1,30 @@
+--- job.py      2016-11-11 22:36:31.566642336 +0000
++++ job_new.py  2016-11-12 06:29:32.618362257 +0000
+@@ -105,8 +105,25 @@
+                     with open(createtmp, "w") as f:
+                         f.write(vol.resolved.encode("utf-8"))
+                     runtime.append(u"--volume=%s:%s:ro" % (createtmp, vol.target))
+-            runtime.append(u"--volume=%s:%s:rw" % (os.path.abspath(self.outdir), "/var/spool/cwl"))
+-            runtime.append(u"--volume=%s:%s:rw" % (os.path.abspath(self.tmpdir), "/tmp"))
++
++            #extra mount point to enable dockstore calls from a dockstore container
++            #by providing the host's docker socket which allows access to the host's
++            #docker engine
++            runtime.append(u"--volume=%s:%s:rw" % ("/var/run/docker.sock", "/var/run/docker.sock"))
++            #do not use temporary paths at the end of the cwd because containers called from containers
++            #via cwltool must be able to find files in a single temporary directory on the host.
++            #each call to cwltool creates a temporary directory where files are staged
++            #so containers further down the creation chain cannot find them
++            #We will create a single temporary directory; this has the disadvantage that it is 
++            #overwritten on  subsequent runs of the tool
++#            runtime.append(u"--volume=%s:%s:rw" % (os.path.normpath(os.getcwd()), "/var/spool/cwl"))
++#            runtime.append(u"--volume=%s:%s:rw" % (os.path.normpath(os.getcwd()), "/tmp"))
++            runtime.append(u"--volume=%s:%s:rw" % (os.path.normpath(os.path.dirname(self.outdir)), "/var/spool/cwl"))
++            runtime.append(u"--volume=%s:%s:rw" % (os.path.normpath(os.path.dirname(self.tmpdir)), "/tmp"))
++
++
++#            runtime.append(u"--volume=%s:%s:rw" % (os.path.abspath(self.outdir), "/var/spool/cwl"))
++#            runtime.append(u"--volume=%s:%s:rw" % (os.path.abspath(self.tmpdir), "/tmp"))
+             runtime.append(u"--workdir=%s" % ("/var/spool/cwl"))
+             runtime.append("--read-only=true")
+             if (kwargs.get("enable_net", None) is None and
