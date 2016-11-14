@@ -6,17 +6,15 @@ label: "container that can call dockstore"
 cwlVersion: v1.0
 doc: |
     ![build_status](https://quay.io/wshands/dockstore_tool_runner/status)
-    A Docker container for the bcbio command.
-    See the bcbio (http://bcbio-nextgen.readthedocs.io/en/latest/index.html)
-    website for more information.
+    A Docker container from which Dockstore containers may be launched.
     ```
     Usage:
     # fetch CWL
-    $> dockstore tool cwl --entry quay.io/wshands/dockstore_tool_runner > cancer_variant_calling.cwl
+    $> dockstore tool cwl --entry quay.io/wshands/dockstore_tool_runner > dockstore_tool_runner.cwl
     # make a runtime JSON template and edit it
-    $> dockstore tool convert cwl2json --cwl cancer_variant_calling.cwl > cancer_variant_calling.json
+    $> dockstore tool convert cwl2json --cwl dockstore_tool_runner.cwl > dockstore_tool_runner.json
     # run it locally with the Dockstore CLI
-    $> dockstore tool launch --entry quay.io/wshands/dockstore_tool_runner  --json cancer_variant_calling.json
+    $> dockstore tool launch --entry quay.io/wshands/dockstore_tool_runner  --json dockstore_tool_runner.json
     ```
 
 #dct:creator:
@@ -26,8 +24,8 @@ doc: |
 
 requirements:
   - class: DockerRequirement
-#    dockerPull: ""
-    dockerImageId: dockstore_tool_runner
+    dockerPull: "quay.io/wshands/dockstore_tool_runner"
+#    dockerImageId: dockstore_tool_runner
   #need this since dockstore is in 
   #/home/ubuntu and the HOME dir is set by 
   #cwltool as /var/... 
