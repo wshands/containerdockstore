@@ -24,8 +24,8 @@ doc: |
 
 requirements:
   - class: DockerRequirement
-    dockerPull: "quay.io/wshands/dockstore_tool_runner"
-#    dockerImageId: dockstore_tool_runner
+#    dockerPull: "quay.io/wshands/dockstore_tool_runner"
+    dockerImageId: dockstore_tool_runner
   #need this since dockstore is in 
   #/home/ubuntu and the HOME dir is set by 
   #cwltool as /var/... 

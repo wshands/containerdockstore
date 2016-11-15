@@ -1,3 +1,6 @@
 token: 0000000000000000000000000000000000000000000000000000000000000000
 server-url: https://dockstore.org:8443
-
+#cwltool-extra-parameters: --debug, --leave-tmpdir
+#
+#cwltool-extra-parameters: --debug, --leave-container, --leave-tmpdir, --basedir /mnt/actiontest/, --outdir /mnt/actiontest/, --tmp-outdir-prefix /mnt/actiontest/, --tmpdir-prefix /mnt/actiontest
+#working-directory: /mnt/actiontest/

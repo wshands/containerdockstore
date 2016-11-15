@@ -50,7 +50,7 @@ def __main__(args):
     #the files written by dockstore in creating this container will be in the
     #place as those written by the container created by the dockstore command
     #belowi
-    print("current OS env TMPDIR:", os.environ["TMPDIR"])
+    print("current OS env TMPDIR:", os.environ.get("TMPDIR"))
     os.environ["TMPDIR"] = options.tmpdir
     print("setting TMPDIR to:", os.environ["TMPDIR"])
     print("new OS env TMPDIR:", os.environ["TMPDIR"])
@@ -62,11 +62,15 @@ def __main__(args):
     #the Dockerfile when the image was built
     fromDirectory = "/home/ubuntu/Dockstore"
     toDockstoreDirectory = os.environ["HOME"] + "/Dockstore"
+    print("HOME + Dockstore dir is {}".format(toDockstoreDirectory))
     if not os.path.isdir(toDockstoreDirectory) and fromDirectory != toDockstoreDirectory:
+        print("copying {} to {}".format(fromDirectory, toDockstoreDirectory))
         copy_tree(fromDirectory, toDockstoreDirectory)
     fromDirectory = "/home/ubuntu/.dockstore"
     toDirectory = os.environ["HOME"] + "/.dockstore"
+    print("HOME + .dockstore dir is {}".format(toDirectory))
     if not os.path.isdir(toDirectory) and fromDirectory != toDirectory:
+        print("copying %s to %s".format(fromDirectory, toDirectory))
         copy_tree(fromDirectory, toDirectory)
 
 
@@ -74,21 +78,23 @@ def __main__(args):
 #export PATH=/home/ubuntu/Dockstore/:$PATH
 #export PATH=$HOME/bin:$PATH
     os.environ["PATH"] = toDockstoreDirectory + ":" + os.environ["PATH"]
+    
+#    cmd = ["which","dockstore"]
+#    subprocess.call(cmd)
 
-    #example of command that will be launched:
-    #dockstore tool launch --entry quay.io/wshands/fastqc --json /home/ubuntu/fastqcwork/fastqc/fastqc.json
-#    cmd = ["dockstore", "tool", "launch", "--entry", options.docker_image, "--json", options.json_file]
+
+#    my_env = os.environ.copy()
+#    my_env["TMPDIR"] = options.tmpdir
+
+    print(os.environ)
+
     cmd = ["dockstore", "tool", "launch", "--debug", "--entry", options.docker_image, "--json", options.json_file]
-
-
-    my_env = os.environ.copy()
-    my_env["TMPDIR"] = options.tmpdir
-
     print("command to run:\n",cmd)
-    output = subprocess.call(cmd, env=my_env)
+#    output = subprocess.call(cmd, env=my_env)
+    output = subprocess.call(cmd)
     print("dockstore command call output is:\n", output)
 
-                        
+                            
 
     
                         

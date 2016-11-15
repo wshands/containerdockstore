@@ -32,7 +32,4 @@
 *.dSYM/
 *.su
 
-.dockstore
-Dockstore
-dockstore
-
+*.v*

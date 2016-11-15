@@ -36,12 +36,7 @@ RUN patch -d /usr/local/lib/python2.7/dist-packages/cwltool/ < /usr/local/lib/py
 # switch back to the ubuntu user so this tool (and the files written) are not owned by root
 RUN groupadd -r -g 1000 ubuntu && useradd -r -g ubuntu -u 1000 ubuntu
 
-#since we have not figured out how to run as nonroot
-#set the following env var so dockstore does not question
-#the fact that we are running as root
-ENV DOCKSTORE_ROOT 1
-
-# create /home/ubuntu in the root as owned by ubuntu before switching to user ubuntu
+#create /home/ubuntu in the root as owned by ubuntu before switching to user ubuntu
 RUN mkdir /home/ubuntu
 RUN chown ubuntu:ubuntu /home/ubuntu
 
@@ -52,6 +47,7 @@ COPY Dockstore/ /home/ubuntu/Dockstore
 RUN chown -R ubuntu:ubuntu /home/ubuntu/Dockstore
 
 ENV PATH /home/ubuntu/Dockstore/:$PATH
+#ENV HOME /home/ubuntu
 
 #copy dockstore files to root so root can run dockstore
 #otherwise for some reason dockstore tries to install
@@ -59,9 +55,20 @@ ENV PATH /home/ubuntu/Dockstore/:$PATH
 COPY .dockstore/ /root/.dockstore
 COPY Dockstore/ /root/Dockstore
 
+ENV PATH /root/Dockstore/:$PATH
+ENV HOME /root
+
 COPY dockstore_tool_runner.py /usr/local/bin
 RUN chmod a+x /usr/local/bin/dockstore_tool_runner.py
 
+#since we have not figured out how to run as nonroot
+#set the following env var so dockstore does not question
+#the fact that we are running as root
+ENV DOCKSTORE_ROOT 1
 
+#container must run as root in order to access docker.sock on the host
+#becuase ubuntu is not a member of the host's docker.sock docker group
+#and there is no way to set this up at build time
+USER root
 #USER ubuntu
 
